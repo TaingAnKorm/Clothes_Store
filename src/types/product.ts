@@ -21,3 +21,15 @@ export interface ProductFilters {
   maxPrice?: number;
   search?: string;
 }
+
+export interface AppState {
+  currentPage: string;
+  products: Product[];
+  filteredProducts: Product[];
+  categories: string[];
+  loading: boolean;
+  error: string | null;
+  cart: CartItem[];
+  darkMode: boolean;
+  filters: ProductFilters;
+}
