@@ -54,7 +54,7 @@ export class Router {
       if (window.lucide) {
         window.lucide.createIcons();
       }
-      // This is the new line that fixes the dark mode button
+
       DarkMode.refreshUI();
     } catch (error) {
       console.error("Error loading route:", error);
