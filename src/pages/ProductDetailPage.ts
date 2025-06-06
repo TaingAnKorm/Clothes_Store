@@ -72,7 +72,7 @@ export class ProductDetailPage {
       if (this.product) {
         this.relatedProducts = await productApi.getRelatedProducts(
           this.product.id,
-          this.product.category,
+          this.product.category
         );
       }
 
@@ -95,7 +95,7 @@ export class ProductDetailPage {
 
     const main = createElement(
       "div",
-      "flex-1 flex items-center justify-center",
+      "flex-1 flex items-center justify-center"
     );
     main.innerHTML = `
       <div class="text-center">
@@ -131,7 +131,7 @@ export class ProductDetailPage {
           </li>
           <li>
             <a href="#/products?category=${encodeURIComponent(
-              this.product!.category,
+              this.product!.category
             )}" class="text-muted-foreground hover:text-primary">
               ${this.product!.category}
             </a>
@@ -197,7 +197,7 @@ export class ProductDetailPage {
                 class="w-full h-full object-contain p-2"
               />
             </button>
-          `,
+          `
             )
             .join("")}
         </div>
@@ -206,7 +206,7 @@ export class ProductDetailPage {
       <div class="space-y-6">
         <div>
           <span class="badge badge-secondary mb-3 ${getCategoryColor(
-            this.product!.category,
+            this.product!.category
           )}">
             ${this.product!.category}
           </span>
@@ -310,7 +310,7 @@ export class ProductDetailPage {
       <div class="flex items-center justify-between mb-8">
         <h2 class="text-2xl font-bold">Related Products</h2>
         <a href="#/products?category=${encodeURIComponent(
-          this.product!.category,
+          this.product!.category
         )}" class="btn btn-outline">
           View All
         </a>
@@ -338,13 +338,13 @@ export class ProductDetailPage {
 
     for (let i = 0; i < fullStars; i++) {
       stars.push(
-        '<i data-lucide="star" class="h-5 w-5 fill-yellow-400 text-yellow-400"></i>',
+        '<i data-lucide="star" class="h-5 w-5 fill-yellow-400 text-yellow-400"></i>'
       );
     }
 
     if (hasHalfStar) {
       stars.push(
-        '<i data-lucide="star" class="h-5 w-5 fill-yellow-400/50 text-yellow-400"></i>',
+        '<i data-lucide="star" class="h-5 w-5 fill-yellow-400/50 text-yellow-400"></i>'
       );
     }
 

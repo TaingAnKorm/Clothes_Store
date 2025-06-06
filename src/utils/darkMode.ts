@@ -49,11 +49,11 @@ export class DarkMode {
       const moonIcon = toggle.querySelector("[data-moon-icon]");
 
       if (this.isDark()) {
-        sunIcon?.classList.add("hidden");
-        moonIcon?.classList.remove("hidden");
-      } else {
         sunIcon?.classList.remove("hidden");
         moonIcon?.classList.add("hidden");
+      } else {
+        sunIcon?.classList.add("hidden");
+        moonIcon?.classList.remove("hidden");
       }
     });
   }

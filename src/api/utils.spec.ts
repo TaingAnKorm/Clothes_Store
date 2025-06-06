@@ -9,14 +9,14 @@ describe("cn function", () => {
   it("should handle conditional classes", () => {
     const isActive = true;
     expect(cn("base-class", isActive && "active-class")).toBe(
-      "base-class active-class",
+      "base-class active-class"
     );
   });
 
   it("should handle false and null conditions", () => {
     const isActive = false;
     expect(cn("base-class", isActive && "active-class", null)).toBe(
-      "base-class",
+      "base-class"
     );
   });
 
@@ -26,7 +26,7 @@ describe("cn function", () => {
 
   it("should work with object notation", () => {
     expect(cn("base", { conditional: true, "not-included": false })).toBe(
-      "base conditional",
+      "base conditional"
     );
   });
 });

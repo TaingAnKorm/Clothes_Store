@@ -7,7 +7,7 @@ export class ProductCard {
   create(): HTMLElement {
     const card = createElement(
       "div",
-      "card group overflow-hidden transition-all hover:shadow-lg",
+      "card group overflow-hidden transition-all hover:shadow-lg"
     );
 
     const stars = this.renderStars(this.product.rating.rate);
@@ -22,7 +22,9 @@ export class ProductCard {
             loading="lazy"
           />
           <div class="absolute top-2 left-2">
-            <span class="badge badge-secondary text-xs ${getCategoryColor(this.product.category)}">
+            <span class="badge badge-secondary text-xs ${getCategoryColor(
+              this.product.category
+            )}">
               ${this.product.category}
             </span>
           </div>
@@ -75,13 +77,13 @@ export class ProductCard {
 
     for (let i = 0; i < fullStars; i++) {
       stars.push(
-        '<i data-lucide="star" class="h-4 w-4 fill-yellow-400 text-yellow-400"></i>',
+        '<i data-lucide="star" class="h-4 w-4 fill-yellow-400 text-yellow-400"></i>'
       );
     }
 
     if (hasHalfStar) {
       stars.push(
-        '<i data-lucide="star" class="h-4 w-4 fill-yellow-400/50 text-yellow-400"></i>',
+        '<i data-lucide="star" class="h-4 w-4 fill-yellow-400/50 text-yellow-400"></i>'
       );
     }
 
@@ -98,7 +100,7 @@ export class ProductCardSkeleton {
   create(): HTMLElement {
     const skeleton = createElement(
       "div",
-      "card border p-4 space-y-4 animate-pulse",
+      "card border p-4 space-y-4 animate-pulse"
     );
 
     skeleton.innerHTML = `

@@ -40,7 +40,7 @@ export class HomePage {
   private createHeroSection(): HTMLElement {
     const section = createElement(
       "section",
-      "relative bg-gradient-to-br from-primary/10 via-background to-secondary/10 py-20 lg:py-32",
+      "relative bg-gradient-to-br from-primary/10 via-background to-secondary/10 py-20 lg:py-32"
     );
 
     section.innerHTML = `

@@ -30,7 +30,7 @@ export function getCategoryColor(category: string): string {
 
 export function debounce<T extends (...args: any[]) => any>(
   func: T,
-  wait: number,
+  wait: number
 ): (...args: Parameters<T>) => void {
   let timeout: NodeJS.Timeout;
   return (...args: Parameters<T>) => {
@@ -67,7 +67,7 @@ export function updateUrlParams(params: Record<string, string | null>): void {
 export function createElement<K extends keyof HTMLElementTagNameMap>(
   tag: K,
   className?: string,
-  attributes?: Record<string, string>,
+  attributes?: Record<string, string>
 ): HTMLElementTagNameMap[K] {
   const element = document.createElement(tag);
 
@@ -86,7 +86,7 @@ export function createElement<K extends keyof HTMLElementTagNameMap>(
 
 export function showToast(
   message: string,
-  type: "success" | "error" | "info" = "info",
+  type: "success" | "error" | "info" = "info"
 ): void {
   const container = document.getElementById("toast-container");
   if (!container) return;
@@ -102,7 +102,7 @@ export function showToast(
         ? "border-red-500"
         : "border-border"
     }
-  `,
+  `
   );
 
   const icon = type === "success" ? "✅" : type === "error" ? "❌" : "ℹ️";

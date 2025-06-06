@@ -7,7 +7,7 @@ export class Navbar {
   create(): HTMLElement {
     const nav = createElement(
       "nav",
-      "sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60",
+      "sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
     );
 
     nav.innerHTML = `
@@ -142,7 +142,7 @@ export class Navbar {
   private attachEventListeners(nav: HTMLElement): void {
     const searchForm = nav.querySelector("#search-form") as HTMLFormElement;
     const mobileSearchForm = nav.querySelector(
-      "#mobile-search-form",
+      "#mobile-search-form"
     ) as HTMLFormElement;
 
     searchForm?.addEventListener("submit", (e) => this.handleSearch(e));
@@ -150,7 +150,7 @@ export class Navbar {
 
     const mobileMenuToggle = nav.querySelector("#mobile-menu-toggle");
     mobileMenuToggle?.addEventListener("click", () =>
-      this.toggleMobileMenu(nav),
+      this.toggleMobileMenu(nav)
     );
 
     const themeToggles = nav.querySelectorAll("[data-theme-toggle]");
