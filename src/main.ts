@@ -5,10 +5,8 @@ import { ProductListPage } from "./pages/ProductListPage";
 import { ProductDetailPage } from "./pages/ProductDetailPage";
 import { showToast } from "./utils/utils";
 
-// Global app state
 let cartItems: any[] = [];
 
-// Global functions for cart management
 (window as any).addToCart = (productId: number) => {
   showToast("Product added to cart!", "success");
   console.log("Added product to cart:", productId);
@@ -29,7 +27,6 @@ class App {
   }
 
   private setupRoutes(): void {
-    // Home page
     this.router.addRoute({
       path: "/",
       component: async () => {
@@ -39,7 +36,6 @@ class App {
       title: "Home",
     });
 
-    // Products listing page
     this.router.addRoute({
       path: "/products",
       component: async () => {
@@ -49,7 +45,6 @@ class App {
       title: "Products",
     });
 
-    // Product detail page
     this.router.addRoute({
       path: "/products/:id",
       component: async () => {
@@ -59,7 +54,6 @@ class App {
       title: "Product Details",
     });
 
-    // 404 page
     this.router.addRoute({
       path: "/404",
       component: async () => {
@@ -84,10 +78,8 @@ class App {
   }
 
   private init(): void {
-    // Initialize dark mode
     DarkMode.init();
 
-    // Show the app container
     const appContainer = document.getElementById("app");
     const loadingElement = document.getElementById("loading");
 
@@ -96,7 +88,6 @@ class App {
       loadingElement.style.display = "none";
     }
 
-    // Initialize Lucide icons
     if (window.lucide) {
       window.lucide.createIcons();
     }
@@ -105,12 +96,10 @@ class App {
   }
 }
 
-// Initialize the application when DOM is loaded
 document.addEventListener("DOMContentLoaded", () => {
   new App();
 });
 
-// Handle unhandled promise rejections
 window.addEventListener("unhandledrejection", (event) => {
   console.error("Unhandled promise rejection:", event.reason);
   showToast("An unexpected error occurred", "error");

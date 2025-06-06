@@ -2,8 +2,8 @@ import { createElement, formatPrice, getCategoryColor } from "@/utils/utils";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ProductCard } from "@/components/ProductCard";
-import { PageLoader } from "@/components/LoadingSpinner";
-import { ProductAPI } from "@/api/productApi";
+import { PageLoader } from "@/components/Loading";
+import { productApi } from "@/api/api";
 import { Product } from "@/types/product";
 
 export class ProductDetailPage {
@@ -16,22 +16,18 @@ export class ProductDetailPage {
   async create(): Promise<HTMLElement> {
     const page = createElement("div", "min-h-screen flex flex-col");
 
-    // Get product ID from URL
     const productId = this.getProductIdFromURL();
     if (!productId) {
       return this.createNotFoundPage();
     }
 
-    // Create navbar and footer
     const navbar = new Navbar();
     const footer = new Footer();
 
     page.appendChild(navbar.create());
 
-    // Main content
     const main = createElement("div", "container mx-auto px-4 py-6 flex-1");
 
-    // Load product data
     try {
       await this.loadProduct(productId);
 
@@ -39,19 +35,15 @@ export class ProductDetailPage {
         return this.createNotFoundPage();
       }
 
-      // Breadcrumb
       const breadcrumb = this.createBreadcrumb();
       main.appendChild(breadcrumb);
 
-      // Back button
       const backButton = this.createBackButton();
       main.appendChild(backButton);
 
-      // Product details
       const productDetails = this.createProductDetails();
       main.appendChild(productDetails);
 
-      // Related products
       if (this.relatedProducts.length > 0) {
         const relatedSection = this.createRelatedProducts();
         main.appendChild(relatedSection);
@@ -75,16 +67,13 @@ export class ProductDetailPage {
 
   private async loadProduct(productId: string): Promise<void> {
     try {
-      this.product = await ProductAPI.getProduct(productId);
+      this.product = await productApi.getProduct(productId);
 
       if (this.product) {
-        // Load related products from the same category
-        const categoryProducts = await ProductAPI.getProductsByCategory(
+        this.relatedProducts = await productApi.getRelatedProducts(
+          this.product.id,
           this.product.category,
         );
-        this.relatedProducts = categoryProducts
-          .filter((p) => p.id !== this.product!.id)
-          .slice(0, 4);
       }
 
       this.loading = false;
@@ -141,7 +130,9 @@ export class ProductDetailPage {
             <i data-lucide="chevron-right" class="h-4 w-4 text-muted-foreground"></i>
           </li>
           <li>
-            <a href="#/products?category=${encodeURIComponent(this.product!.category)}" class="text-muted-foreground hover:text-primary">
+            <a href="#/products?category=${encodeURIComponent(
+              this.product!.category,
+            )}" class="text-muted-foreground hover:text-primary">
               ${this.product!.category}
             </a>
           </li>
@@ -149,7 +140,9 @@ export class ProductDetailPage {
             <i data-lucide="chevron-right" class="h-4 w-4 text-muted-foreground"></i>
           </li>
           <li>
-            <span class="text-foreground line-clamp-1">${this.product!.title}</span>
+            <span class="text-foreground line-clamp-1">${
+              this.product!.title
+            }</span>
           </li>
         </ol>
       </nav>
@@ -179,7 +172,6 @@ export class ProductDetailPage {
     const stars = this.renderStars(this.product!.rating.rate);
 
     container.innerHTML = `
-      <!-- Product Images -->
       <div class="space-y-4">
         <div class="aspect-square bg-white rounded-lg border overflow-hidden">
           <img
@@ -189,13 +181,14 @@ export class ProductDetailPage {
           />
         </div>
         
-        <!-- Thumbnail images -->
         <div class="grid grid-cols-4 gap-2">
           ${[...Array(4)]
             .map(
               (_, index) => `
             <button
-              class="aspect-square bg-white rounded-lg border overflow-hidden ${index === 0 ? "ring-2 ring-primary" : ""}"
+              class="aspect-square bg-white rounded-lg border overflow-hidden ${
+                index === 0 ? "ring-2 ring-primary" : ""
+              }"
               onclick="this.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('ring-2', 'ring-primary')); this.classList.add('ring-2', 'ring-primary');"
             >
               <img
@@ -210,10 +203,11 @@ export class ProductDetailPage {
         </div>
       </div>
 
-      <!-- Product Info -->
       <div class="space-y-6">
         <div>
-          <span class="badge badge-secondary mb-3 ${getCategoryColor(this.product!.category)}">
+          <span class="badge badge-secondary mb-3 ${getCategoryColor(
+            this.product!.category,
+          )}">
             ${this.product!.category}
           </span>
           <h1 class="text-3xl font-bold mb-4">${this.product!.title}</h1>
@@ -223,7 +217,9 @@ export class ProductDetailPage {
               ${stars}
             </div>
             <span class="text-sm text-muted-foreground">
-              ${this.product!.rating.rate} (${this.product!.rating.count} reviews)
+              ${this.product!.rating.rate} (${
+      this.product!.rating.count
+    } reviews)
             </span>
           </div>
 
@@ -243,7 +239,6 @@ export class ProductDetailPage {
 
         <hr class="border-border">
 
-        <!-- Quantity and Add to Cart -->
         <div class="space-y-4">
           <div class="flex items-center space-x-4">
             <label class="font-medium">Quantity:</label>
@@ -283,7 +278,6 @@ export class ProductDetailPage {
 
         <hr class="border-border">
 
-        <!-- Features -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div class="card p-4 text-center">
             <i data-lucide="truck" class="h-8 w-8 text-primary mx-auto mb-2"></i>
@@ -315,17 +309,17 @@ export class ProductDetailPage {
     section.innerHTML = `
       <div class="flex items-center justify-between mb-8">
         <h2 class="text-2xl font-bold">Related Products</h2>
-        <a href="#/products?category=${encodeURIComponent(this.product!.category)}" class="btn btn-outline">
+        <a href="#/products?category=${encodeURIComponent(
+          this.product!.category,
+        )}" class="btn btn-outline">
           View All
         </a>
       </div>
       
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6" id="related-products">
-        <!-- Related products will be inserted here -->
-      </div>
+        </div>
     `;
 
-    // Add related products
     const relatedContainer = section.querySelector("#related-products");
     if (relatedContainer) {
       this.relatedProducts.forEach((product) => {

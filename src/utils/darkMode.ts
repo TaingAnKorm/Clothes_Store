@@ -4,7 +4,7 @@ export class DarkMode {
   static init(): void {
     const stored = localStorage.getItem(this.STORAGE_KEY);
     const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)",
+      "(prefers-color-scheme: dark)"
     ).matches;
 
     if (stored === "true" || (stored === null && prefersDark)) {
@@ -36,6 +36,10 @@ export class DarkMode {
 
   static isDark(): boolean {
     return document.documentElement.classList.contains("dark");
+  }
+
+  public static refreshUI(): void {
+    this.updateToggleIcon();
   }
 
   private static updateToggleIcon(): void {

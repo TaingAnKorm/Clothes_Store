@@ -1,3 +1,5 @@
+import { DarkMode } from "./darkMode";
+
 export interface Route {
   path: string;
   component: () => Promise<HTMLElement>;
@@ -7,8 +9,10 @@ export interface Route {
 export class Router {
   private routes: Route[] = [];
   private currentRoute: Route | null = null;
+  private container: HTMLElement;
 
-  constructor(private container: HTMLElement) {
+  constructor(container: HTMLElement) {
+    this.container = container;
     this.init();
   }
 
@@ -26,8 +30,8 @@ export class Router {
   }
 
   private async handleRoute(): Promise<void> {
-    const hash = window.location.hash.slice(1) || "/";
-    const route = this.findRoute(hash);
+    const path = window.location.hash.slice(1) || "/";
+    const route = this.findRoute(path);
 
     if (!route) {
       this.navigate("/404");
@@ -36,26 +40,22 @@ export class Router {
 
     this.currentRoute = route;
 
-    // Update page title
     if (route.title) {
-      document.title = `${route.title} - StyleStore`;
+      document.title = `${route.title} - The Violet`;
     }
 
-    // Show loading
     this.showLoading();
 
     try {
-      // Load component
       const component = await route.component();
-
-      // Clear container and add new component
       this.container.innerHTML = "";
       this.container.appendChild(component);
 
-      // Initialize Lucide icons for the new content
       if (window.lucide) {
         window.lucide.createIcons();
       }
+      // This is the new line that fixes the dark mode button
+      DarkMode.refreshUI();
     } catch (error) {
       console.error("Error loading route:", error);
       this.showError("Failed to load page");
@@ -65,42 +65,26 @@ export class Router {
   }
 
   private findRoute(path: string): Route | null {
-    // Exact match first
-    let route = this.routes.find((r) => r.path === path);
+    const [pathWithoutQuery] = path.split("?");
 
-    if (!route) {
-      // Try pattern matching for dynamic routes
-      route = this.routes.find((r) => {
-        const routeParts = r.path.split("/");
-        const pathParts = path.split("/");
+    let route = this.routes.find((r) => r.path === pathWithoutQuery);
 
-        if (routeParts.length !== pathParts.length) return false;
-
-        return routeParts.every((part, index) => {
-          return part.startsWith(":") || part === pathParts[index];
-        });
-      });
+    if (route) {
+      return route;
     }
 
-    return route || null;
-  }
+    route = this.routes.find((r) => {
+      const routeParts = r.path.split("/");
+      const pathParts = pathWithoutQuery.split("/");
 
-  getRouteParams(): Record<string, string> {
-    if (!this.currentRoute) return {};
+      if (routeParts.length !== pathParts.length) return false;
 
-    const hash = window.location.hash.slice(1) || "/";
-    const routeParts = this.currentRoute.path.split("/");
-    const pathParts = hash.split("/");
-    const params: Record<string, string> = {};
-
-    routeParts.forEach((part, index) => {
-      if (part.startsWith(":")) {
-        const paramName = part.slice(1);
-        params[paramName] = pathParts[index];
-      }
+      return routeParts.every((part, index) => {
+        return part.startsWith(":") || part === pathParts[index];
+      });
     });
 
-    return params;
+    return route || null;
   }
 
   private showLoading(): void {

@@ -40,21 +40,28 @@ export function debounce<T extends (...args: any[]) => any>(
 }
 
 export function getUrlParams(): URLSearchParams {
-  return new URLSearchParams(window.location.search);
+  const hash = window.location.hash;
+  const queryIndex = hash.indexOf("?");
+  if (queryIndex === -1) {
+    return new URLSearchParams("");
+  }
+  return new URLSearchParams(hash.slice(queryIndex + 1));
 }
 
 export function updateUrlParams(params: Record<string, string | null>): void {
-  const url = new URL(window.location.href);
+  const [path] = window.location.hash.slice(1).split("?");
+  const urlParams = getUrlParams();
 
-  Object.entries(params).forEach(([key, value]) => {
-    if (value === null || value === "") {
-      url.searchParams.delete(key);
+  for (const [key, value] of Object.entries(params)) {
+    if (value) {
+      urlParams.set(key, value);
     } else {
-      url.searchParams.set(key, value);
+      urlParams.delete(key);
     }
-  });
+  }
 
-  window.history.pushState({}, "", url.toString());
+  const newQueryString = urlParams.toString();
+  window.location.hash = newQueryString ? `${path}?${newQueryString}` : path;
 }
 
 export function createElement<K extends keyof HTMLElementTagNameMap>(
@@ -88,7 +95,13 @@ export function showToast(
     "div",
     `
     fixed bg-card border rounded-lg shadow-lg p-4 min-w-[300px] animate-in slide-in-from-right fade-in
-    ${type === "success" ? "border-green-500" : type === "error" ? "border-red-500" : "border-border"}
+    ${
+      type === "success"
+        ? "border-green-500"
+        : type === "error"
+        ? "border-red-500"
+        : "border-border"
+    }
   `,
   );
 

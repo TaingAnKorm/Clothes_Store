@@ -1,9 +1,8 @@
-import { createElement, updateUrlParams } from "@/utils/utils";
+import { createElement } from "@/utils/utils";
 import { DarkMode } from "@/utils/darkMode";
 
 export class Navbar {
   private isMenuOpen = false;
-  private searchQuery = "";
 
   create(): HTMLElement {
     const nav = createElement(
@@ -14,13 +13,11 @@ export class Navbar {
     nav.innerHTML = `
       <div class="container mx-auto px-4">
         <div class="flex h-16 items-center justify-between">
-          <!-- Logo -->
           <a href="#/" class="flex items-center space-x-2">
             <i data-lucide="shopping-bag" class="h-8 w-8 text-primary"></i>
-            <span class="text-xl font-bold text-primary">StyleStore</span>
+            <span class="text-xl font-bold text-primary">The Violet</span>
           </a>
 
-          <!-- Desktop Navigation -->
           <div class="hidden md:flex items-center space-x-8">
             <a href="#/products" class="text-foreground hover:text-primary transition-colors">
               All Products
@@ -31,15 +28,11 @@ export class Navbar {
             <a href="#/products?category=women's clothing" class="text-foreground hover:text-primary transition-colors">
               Women
             </a>
-            <a href="#/products?category=electronics" class="text-foreground hover:text-primary transition-colors">
-              Electronics
-            </a>
             <a href="#/products?category=jewelery" class="text-foreground hover:text-primary transition-colors">
               Jewelry
             </a>
           </div>
 
-          <!-- Search Bar -->
           <div class="hidden md:flex flex-1 max-w-md mx-8">
             <form class="flex w-full" id="search-form">
               <input
@@ -57,9 +50,7 @@ export class Navbar {
             </form>
           </div>
 
-          <!-- Right side actions -->
           <div class="flex items-center space-x-4">
-            <!-- Theme Toggle -->
             <button
               class="btn btn-ghost btn-icon hidden md:flex"
               data-theme-toggle
@@ -69,22 +60,19 @@ export class Navbar {
               <i data-lucide="moon" data-moon-icon class="h-4 w-4 hidden"></i>
             </button>
 
-            <!-- User Menu -->
             <div class="relative">
               <button class="btn btn-ghost btn-icon" id="user-menu-button">
                 <i data-lucide="user" class="h-4 w-4"></i>
               </button>
             </div>
 
-            <!-- Cart -->
             <button class="btn btn-ghost btn-icon relative" id="cart-button">
               <i data-lucide="shopping-cart" class="h-4 w-4"></i>
-              <span class="absolute -top-2 -right-2 h-5 w-5 rounded-full bg-destructive text-destructive-foreground text-xs flex items-center justify-center hidden" id="cart-count">
+              <span class="absolute -top-2 -right-2 h-5 w-5 rounded-full bg-destructive text-destructive-foreground text-xs items-center justify-center hidden" id="cart-count">
                 0
               </span>
             </button>
 
-            <!-- Mobile menu button -->
             <button
               class="btn btn-ghost btn-icon md:hidden"
               id="mobile-menu-toggle"
@@ -95,9 +83,7 @@ export class Navbar {
           </div>
         </div>
 
-        <!-- Mobile Navigation Menu -->
         <div class="md:hidden border-t py-4 space-y-4 hidden" id="mobile-menu">
-          <!-- Mobile Search -->
           <form class="flex space-x-2" id="mobile-search-form">
             <input
               type="text"
@@ -110,7 +96,6 @@ export class Navbar {
             </button>
           </form>
 
-          <!-- Mobile Navigation Links -->
           <div class="flex flex-col space-y-2">
             <a 
               href="#/products" 
@@ -131,12 +116,6 @@ export class Navbar {
               Women's Clothing
             </a>
             <a 
-              href="#/products?category=electronics" 
-              class="py-2 text-foreground hover:text-primary transition-colors"
-            >
-              Electronics
-            </a>
-            <a 
               href="#/products?category=jewelery" 
               class="py-2 text-foreground hover:text-primary transition-colors"
             >
@@ -144,7 +123,6 @@ export class Navbar {
             </a>
           </div>
 
-          <!-- Mobile Theme Toggle -->
           <button
             class="btn btn-ghost justify-start"
             data-theme-toggle
@@ -162,7 +140,6 @@ export class Navbar {
   }
 
   private attachEventListeners(nav: HTMLElement): void {
-    // Search form handlers
     const searchForm = nav.querySelector("#search-form") as HTMLFormElement;
     const mobileSearchForm = nav.querySelector(
       "#mobile-search-form",
@@ -171,19 +148,16 @@ export class Navbar {
     searchForm?.addEventListener("submit", (e) => this.handleSearch(e));
     mobileSearchForm?.addEventListener("submit", (e) => this.handleSearch(e));
 
-    // Mobile menu toggle
     const mobileMenuToggle = nav.querySelector("#mobile-menu-toggle");
     mobileMenuToggle?.addEventListener("click", () =>
       this.toggleMobileMenu(nav),
     );
 
-    // Theme toggle
     const themeToggles = nav.querySelectorAll("[data-theme-toggle]");
     themeToggles.forEach((toggle) => {
       toggle.addEventListener("click", () => DarkMode.toggle());
     });
 
-    // Mobile menu links - close menu when clicked
     const mobileLinks = nav.querySelectorAll("#mobile-menu a");
     mobileLinks.forEach((link) => {
       link.addEventListener("click", () => this.closeMobileMenu(nav));

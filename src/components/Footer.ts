@@ -11,7 +11,7 @@ export class Footer {
           <div class="space-y-4">
             <div class="flex items-center space-x-2">
               <i data-lucide="shopping-bag" class="h-8 w-8 text-primary"></i>
-              <span class="text-xl font-bold text-primary">StyleStore</span>
+              <span class="text-xl font-bold text-primary">The Violet</span>
             </div>
             <p class="text-sm text-muted-foreground">
               Your premier destination for fashion, electronics, and lifestyle products. 
@@ -193,7 +193,7 @@ export class Footer {
 
         <div class="border-t mt-8 pt-8 flex flex-col sm:flex-row justify-between items-center">
           <p class="text-sm text-muted-foreground">
-            © 2024 StyleStore. All rights reserved.
+            © 2025 The Violet. All rights reserved.
           </p>
           <div class="flex space-x-4 mt-4 sm:mt-0">
             <a 
