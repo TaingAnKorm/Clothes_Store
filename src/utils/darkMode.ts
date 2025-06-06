@@ -4,7 +4,7 @@ export class DarkMode {
   static init(): void {
     const stored = localStorage.getItem(this.STORAGE_KEY);
     const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
+      "(prefers-color-scheme: dark)",
     ).matches;
 
     if (stored === "true" || (stored === null && prefersDark)) {
@@ -49,11 +49,13 @@ export class DarkMode {
       const moonIcon = toggle.querySelector("[data-moon-icon]");
 
       if (this.isDark()) {
-        sunIcon?.classList.add("hidden");
-        moonIcon?.classList.remove("hidden");
-      } else {
+        // In dark mode, show sun icon (to switch to light mode)
         sunIcon?.classList.remove("hidden");
         moonIcon?.classList.add("hidden");
+      } else {
+        // In light mode, show moon icon (to switch to dark mode)
+        sunIcon?.classList.add("hidden");
+        moonIcon?.classList.remove("hidden");
       }
     });
   }
