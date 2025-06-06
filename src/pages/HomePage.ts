@@ -53,15 +53,15 @@ export class HomePage {
                 New Collection 2024
               </span>
               <h1 class="text-4xl lg:text-6xl font-bold leading-tight">
-                Discover Your 
+                Discover Your
                 <span class="text-primary block">Perfect Style</span>
               </h1>
               <p class="text-lg text-muted-foreground max-w-lg">
-                Explore our curated collection of premium clothing and stunning jewelry. 
+                Explore our curated collection of premium clothing and stunning jewelry.
                 Quality meets affordability in every piece.
               </p>
             </div>
-            
+
             <div class="flex flex-col sm:flex-row gap-4">
               <a href="#/products" class="btn btn-primary btn-lg">
                 Shop Now
@@ -160,7 +160,7 @@ export class HomePage {
             Discover our carefully curated collections designed to suit every style and occasion
           </p>
         </div>
-        
+
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <a href="#/products?category=men's clothing" class="group">
             <div class="relative h-48 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 flex flex-col justify-between overflow-hidden transition-transform group-hover:scale-105">
@@ -171,7 +171,7 @@ export class HomePage {
               </div>
             </div>
           </a>
-          
+
           <a href="#/products?category=women's clothing" class="group">
             <div class="relative h-48 bg-gradient-to-br from-pink-500 to-pink-600 rounded-2xl p-6 flex flex-col justify-between overflow-hidden transition-transform group-hover:scale-105">
               <h3 class="text-white font-semibold text-lg mb-2">Women's Fashion</h3>
@@ -181,7 +181,7 @@ export class HomePage {
               </div>
             </div>
           </a>
-          
+
           <a href="#/products?category=jewelery" class="group">
             <div class="relative h-48 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-6 flex flex-col justify-between overflow-hidden transition-transform group-hover:scale-105">
               <h3 class="text-white font-semibold text-lg mb-2">Jewelry</h3>
@@ -246,6 +246,9 @@ export class HomePage {
 
       if (window.lucide) {
         window.lucide.createIcons();
+        import("@/utils/darkMode").then(({ DarkMode }) => {
+          DarkMode.refreshUI();
+        });
       }
     } catch (error) {
       console.error("Failed to load products:", error);

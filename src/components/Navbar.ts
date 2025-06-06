@@ -41,8 +41,8 @@ export class Navbar {
                 class="input rounded-r-none flex-1"
                 id="search-input"
               />
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 class="btn btn-outline btn-icon rounded-l-none border-l-0"
               >
                 <i data-lucide="search" class="h-4 w-4"></i>
@@ -97,26 +97,26 @@ export class Navbar {
           </form>
 
           <div class="flex flex-col space-y-2">
-            <a 
-              href="#/products" 
+            <a
+              href="#/products"
               class="py-2 text-foreground hover:text-primary transition-colors"
             >
               All Products
             </a>
-            <a 
-              href="#/products?category=men's clothing" 
+            <a
+              href="#/products?category=men's clothing"
               class="py-2 text-foreground hover:text-primary transition-colors"
             >
               Men's Clothing
             </a>
-            <a 
-              href="#/products?category=women's clothing" 
+            <a
+              href="#/products?category=women's clothing"
               class="py-2 text-foreground hover:text-primary transition-colors"
             >
               Women's Clothing
             </a>
-            <a 
-              href="#/products?category=jewelery" 
+            <a
+              href="#/products?category=jewelery"
               class="py-2 text-foreground hover:text-primary transition-colors"
             >
               Jewelry
@@ -155,12 +155,26 @@ export class Navbar {
 
     const themeToggles = nav.querySelectorAll("[data-theme-toggle]");
     themeToggles.forEach((toggle) => {
-      toggle.addEventListener("click", () => DarkMode.toggle());
+      toggle.addEventListener("click", () => {
+        DarkMode.toggle();
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+      });
     });
+
+    setTimeout(() => {
+      DarkMode.refreshUI();
+    }, 50);
 
     const mobileLinks = nav.querySelectorAll("#mobile-menu a");
     mobileLinks.forEach((link) => {
       link.addEventListener("click", () => this.closeMobileMenu(nav));
+    });
+
+    const cartButton = nav.querySelector("#cart-button");
+    cartButton?.addEventListener("click", () => {
+      (window as any).openCart();
     });
   }
 

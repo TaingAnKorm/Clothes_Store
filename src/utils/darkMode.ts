@@ -2,14 +2,21 @@ export class DarkMode {
   private static readonly STORAGE_KEY = "dark-mode";
 
   static init(): void {
-    const stored = localStorage.getItem(this.STORAGE_KEY);
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
+    try {
+      const stored = localStorage.getItem(this.STORAGE_KEY);
+      const prefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches;
 
-    if (stored === "true" || (stored === null && prefersDark)) {
-      this.enable();
-    } else {
+      console.log("Dark mode init:", { stored, prefersDark });
+
+      if (stored === "true" || (stored === null && prefersDark)) {
+        this.enable();
+      } else {
+        this.disable();
+      }
+    } catch (error) {
+      console.error("Dark mode initialization error:", error);
       this.disable();
     }
   }
@@ -17,12 +24,14 @@ export class DarkMode {
   static enable(): void {
     document.documentElement.classList.add("dark");
     localStorage.setItem(this.STORAGE_KEY, "true");
+    console.log("Dark mode enabled");
     this.updateToggleIcon();
   }
 
   static disable(): void {
     document.documentElement.classList.remove("dark");
     localStorage.setItem(this.STORAGE_KEY, "false");
+    console.log("Dark mode disabled");
     this.updateToggleIcon();
   }
 
@@ -44,16 +53,24 @@ export class DarkMode {
 
   private static updateToggleIcon(): void {
     const toggles = document.querySelectorAll("[data-theme-toggle]");
-    toggles.forEach((toggle) => {
+    console.log("Updating toggle icons, found toggles:", toggles.length);
+
+    toggles.forEach((toggle, index) => {
       const sunIcon = toggle.querySelector("[data-sun-icon]");
       const moonIcon = toggle.querySelector("[data-moon-icon]");
 
+      console.log(`Toggle ${index}:`, {
+        sunIcon: !!sunIcon,
+        moonIcon: !!moonIcon,
+        isDark: this.isDark(),
+      });
+
       if (this.isDark()) {
-        sunIcon?.classList.remove("hidden");
-        moonIcon?.classList.add("hidden");
-      } else {
         sunIcon?.classList.add("hidden");
         moonIcon?.classList.remove("hidden");
+      } else {
+        sunIcon?.classList.remove("hidden");
+        moonIcon?.classList.add("hidden");
       }
     });
   }

@@ -180,7 +180,7 @@ export class ProductDetailPage {
             class="w-full h-full object-contain p-8"
           />
         </div>
-        
+
         <div class="grid grid-cols-4 gap-2">
           ${[...Array(4)]
             .map(
@@ -211,7 +211,7 @@ export class ProductDetailPage {
             ${this.product!.category}
           </span>
           <h1 class="text-3xl font-bold mb-4">${this.product!.title}</h1>
-          
+
           <div class="flex items-center space-x-4 mb-4">
             <div class="flex items-center space-x-1">
               ${stars}
@@ -260,9 +260,11 @@ export class ProductDetailPage {
           </div>
 
           <div class="flex space-x-4">
-            <button 
+            <button
               class="btn btn-primary btn-lg flex-1"
-              onclick="window.addToCart(${this.product!.id})"
+              onclick="window.addToCartWithQuantity('${
+                this.product!.id
+              }', parseInt(document.getElementById('quantity-display').textContent))"
             >
               <i data-lucide="shopping-cart" class="h-5 w-5 mr-2"></i>
               Add to Cart
@@ -284,13 +286,13 @@ export class ProductDetailPage {
             <h4 class="font-medium mb-1">Free Shipping</h4>
             <p class="text-sm text-muted-foreground">On orders over $50</p>
           </div>
-          
+
           <div class="card p-4 text-center">
             <i data-lucide="refresh-cw" class="h-8 w-8 text-primary mx-auto mb-2"></i>
             <h4 class="font-medium mb-1">Easy Returns</h4>
             <p class="text-sm text-muted-foreground">30-day return policy</p>
           </div>
-          
+
           <div class="card p-4 text-center">
             <i data-lucide="shield" class="h-8 w-8 text-primary mx-auto mb-2"></i>
             <h4 class="font-medium mb-1">Secure Payment</h4>
@@ -315,7 +317,7 @@ export class ProductDetailPage {
           View All
         </a>
       </div>
-      
+
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6" id="related-products">
         </div>
     `;

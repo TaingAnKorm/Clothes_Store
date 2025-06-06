@@ -1,5 +1,6 @@
 import { Product } from "@/types/product";
 import { createElement, formatPrice, getCategoryColor } from "@/utils/utils";
+import { CartManager } from "@/utils/cart";
 
 export class ProductCard {
   constructor(private product: Product) {}
@@ -43,29 +44,35 @@ export class ProductCard {
             ${this.product.title}
           </h3>
         </a>
-        
+
         <div class="flex items-center space-x-1 mb-2">
           ${stars}
           <span class="text-sm text-muted-foreground ml-1">
             (${this.product.rating.count})
           </span>
         </div>
-        
+
         <div class="flex items-center justify-between mb-4">
           <span class="text-lg font-bold text-primary">
             ${formatPrice(this.product.price)}
           </span>
         </div>
 
-        <button 
-          class="btn btn-primary w-full btn-sm"
-          onclick="window.addToCart(${this.product.id})"
+        <button
+          class="btn btn-primary w-full btn-sm add-to-cart-btn"
+          onclick="window.addToCart('${this.product.id}')"
+          data-product-id="${this.product.id}"
         >
           <i data-lucide="shopping-cart" class="h-4 w-4 mr-2"></i>
-          Add to Cart
+          <span class="btn-text">Add to Cart</span>
         </button>
       </div>
     `;
+
+    this.updateCartButtonState(card);
+
+    const updateHandler = () => this.updateCartButtonState(card);
+    CartManager.addListener(updateHandler);
 
     return card;
   }
@@ -93,6 +100,25 @@ export class ProductCard {
     }
 
     return stars.join("");
+  }
+
+  private updateCartButtonState(card: HTMLElement): void {
+    const button = card.querySelector(".add-to-cart-btn") as HTMLButtonElement;
+    const buttonText = button?.querySelector(".btn-text");
+
+    if (!button || !buttonText) return;
+
+    const quantity = CartManager.getItemQuantity(this.product.id);
+
+    if (quantity > 0) {
+      button.classList.remove("btn-primary");
+      button.classList.add("btn-secondary");
+      buttonText.textContent = `In Cart (${quantity})`;
+    } else {
+      button.classList.remove("btn-secondary");
+      button.classList.add("btn-primary");
+      buttonText.textContent = "Add to Cart";
+    }
   }
 }
 

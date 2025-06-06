@@ -1,15 +1,74 @@
 import { Router } from "./utils/router";
 import { DarkMode } from "./utils/darkMode";
+import { CartManager } from "./utils/cart";
+import { CartModal } from "./components/CartModal";
 import { HomePage } from "./pages/HomePage";
 import { ProductListPage } from "./pages/ProductListPage";
 import { ProductDetailPage } from "./pages/ProductDetailPage";
-import { showToast } from "./utils/utils";
+import { showToast, formatPrice } from "./utils/utils";
+import { productApi } from "./api/api";
 
-let cartItems: any[] = [];
+let cartModal: CartModal | null = null;
 
-(window as any).addToCart = (productId: number) => {
-  showToast("Product added to cart!", "success");
-  console.log("Added product to cart:", productId);
+(window as any).addToCart = async (productId: string) => {
+  try {
+    const product = await productApi.getProduct(productId);
+    if (product) {
+      CartManager.addToCart(product);
+    } else {
+      showToast("Product not found", "error");
+    }
+  } catch (error) {
+    console.error("Failed to add product to cart:", error);
+    showToast("Failed to add product to cart", "error");
+  }
+};
+
+(window as any).addToCartWithQuantity = async (
+  productId: string,
+  quantity: number
+) => {
+  try {
+    const product = await productApi.getProduct(productId);
+    if (product) {
+      CartManager.addToCart(product, quantity);
+    } else {
+      showToast("Product not found", "error");
+    }
+  } catch (error) {
+    console.error("Failed to add product to cart:", error);
+    showToast("Failed to add product to cart", "error");
+  }
+};
+
+(window as any).removeFromCart = (productId: string) => {
+  CartManager.removeFromCart(productId);
+};
+
+(window as any).updateCartQuantity = (productId: string, quantity: number) => {
+  CartManager.updateQuantity(productId, quantity);
+};
+
+(window as any).openCart = () => {
+  cartModal?.open();
+};
+
+(window as any).closeCart = () => {
+  cartModal?.close();
+};
+
+(window as any).proceedToCheckout = () => {
+  const items = CartManager.getItems();
+  const total = CartManager.getTotalPrice();
+
+  if (items.length === 0) {
+    showToast("Your cart is empty", "error");
+    return;
+  }
+
+  showToast(`Checkout complete! Total: ${formatPrice(total)}`, "success");
+  CartManager.clearCart();
+  cartModal?.close();
 };
 
 class App {
@@ -79,6 +138,7 @@ class App {
 
   private init(): void {
     DarkMode.init();
+    CartManager.init();
 
     const appContainer = document.getElementById("app");
     const loadingElement = document.getElementById("loading");
@@ -88,8 +148,14 @@ class App {
       loadingElement.style.display = "none";
     }
 
+    cartModal = new CartModal();
+    document.body.appendChild(cartModal.create());
+
     if (window.lucide) {
       window.lucide.createIcons();
+      setTimeout(() => {
+        DarkMode.refreshUI();
+      }, 100);
     }
 
     console.log("StyleStore app initialized");
