@@ -8,13 +8,13 @@ export class ProductCard {
   create(): HTMLElement {
     const card = createElement(
       "div",
-      "card group overflow-hidden transition-all hover:shadow-lg"
+      "card group overflow-hidden transition-all hover:shadow-lg h-full flex flex-col"
     );
 
     const stars = this.renderStars(this.product.rating.rate);
 
     card.innerHTML = `
-      <a href="#/products/${this.product.id}">
+      <a href="#/products/${this.product.id}" class="flex-shrink-0">
         <div class="relative overflow-hidden">
           <img
             src="${this.product.image}"
@@ -38,28 +38,30 @@ export class ProductCard {
         </div>
       </a>
 
-      <div class="p-4">
-        <a href="#/products/${this.product.id}">
-          <h3 class="font-medium text-sm line-clamp-2 mb-2 hover:text-primary transition-colors">
-            ${this.product.title}
-          </h3>
-        </a>
+      <div class="p-4 flex flex-col flex-grow">
+        <div class="flex-grow">
+          <a href="#/products/${this.product.id}">
+            <h3 class="font-medium text-sm line-clamp-2 mb-2 hover:text-primary transition-colors min-h-[2.5rem]">
+              ${this.product.title}
+            </h3>
+          </a>
 
-        <div class="flex items-center space-x-1 mb-2">
-          ${stars}
-          <span class="text-sm text-muted-foreground ml-1">
-            (${this.product.rating.count})
-          </span>
-        </div>
+          <div class="flex items-center space-x-1 mb-2">
+            ${stars}
+            <span class="text-sm text-muted-foreground ml-1">
+              (${this.product.rating.count})
+            </span>
+          </div>
 
-        <div class="flex items-center justify-between mb-4">
-          <span class="text-lg font-bold text-primary">
-            ${formatPrice(this.product.price)}
-          </span>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-lg font-bold text-primary">
+              ${formatPrice(this.product.price)}
+            </span>
+          </div>
         </div>
 
         <button
-          class="btn btn-primary w-full btn-sm add-to-cart-btn"
+          class="btn btn-primary w-full btn-sm add-to-cart-btn mt-auto"
           onclick="window.addToCart('${this.product.id}')"
           data-product-id="${this.product.id}"
         >
@@ -126,15 +128,18 @@ export class ProductCardSkeleton {
   create(): HTMLElement {
     const skeleton = createElement(
       "div",
-      "card border p-4 space-y-4 animate-pulse"
+      "card border h-full flex flex-col animate-pulse"
     );
 
     skeleton.innerHTML = `
-      <div class="aspect-square bg-muted rounded-lg"></div>
-      <div class="space-y-2">
-        <div class="h-4 bg-muted rounded"></div>
-        <div class="h-4 bg-muted rounded w-3/4"></div>
-        <div class="h-6 bg-muted rounded w-1/4"></div>
+      <div class="aspect-square bg-muted rounded-t-lg flex-shrink-0"></div>
+      <div class="p-4 flex flex-col flex-grow">
+        <div class="flex-grow space-y-2">
+          <div class="h-4 bg-muted rounded"></div>
+          <div class="h-4 bg-muted rounded w-3/4"></div>
+          <div class="h-6 bg-muted rounded w-1/4 mt-4"></div>
+        </div>
+        <div class="h-8 bg-muted rounded mt-4"></div>
       </div>
     `;
 

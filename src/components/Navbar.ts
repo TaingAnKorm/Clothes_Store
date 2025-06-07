@@ -3,6 +3,7 @@ import { DarkMode } from "@/utils/darkMode";
 
 export class Navbar {
   private isMenuOpen = false;
+  private isProfileMenuOpen = false;
 
   create(): HTMLElement {
     const nav = createElement(
@@ -60,10 +61,28 @@ export class Navbar {
               <i data-lucide="moon" data-moon-icon class="h-4 w-4 hidden"></i>
             </button>
 
-            <div class="relative">
-              <button class="btn btn-ghost btn-icon" id="user-menu-button">
+            <div class="relative" id="profile-dropdown">
+              <button class="btn btn-ghost btn-icon" id="user-menu-button" aria-haspopup="true" aria-expanded="false">
                 <i data-lucide="user" class="h-4 w-4"></i>
               </button>
+
+              <div class="absolute right-0 top-full mt-2 w-48 bg-background border border-border rounded-lg shadow-lg z-50 hidden" id="profile-menu">
+                <div class="py-2">
+                  <button class="flex items-center w-full px-4 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground transition-colors" id="login-option">
+                    <i data-lucide="log-in" class="h-4 w-4 mr-3"></i>
+                    Login
+                  </button>
+                  <button class="flex items-center w-full px-4 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground transition-colors" id="logout-option">
+                    <i data-lucide="log-out" class="h-4 w-4 mr-3"></i>
+                    Logout
+                  </button>
+                  <hr class="my-2 border-border">
+                  <button class="flex items-center w-full px-4 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground transition-colors" id="settings-option">
+                    <i data-lucide="settings" class="h-4 w-4 mr-3"></i>
+                    Settings
+                  </button>
+                </div>
+              </div>
             </div>
 
             <button class="btn btn-ghost btn-icon relative" id="cart-button">
@@ -131,6 +150,23 @@ export class Navbar {
             <i data-lucide="moon" data-moon-icon class="h-4 w-4 mr-2 hidden"></i>
             Toggle theme
           </button>
+
+          <hr class="border-border">
+
+          <div class="space-y-2">
+            <button class="btn btn-ghost justify-start w-full" id="mobile-login-option">
+              <i data-lucide="log-in" class="h-4 w-4 mr-2"></i>
+              Login
+            </button>
+            <button class="btn btn-ghost justify-start w-full" id="mobile-logout-option">
+              <i data-lucide="log-out" class="h-4 w-4 mr-2"></i>
+              Logout
+            </button>
+            <button class="btn btn-ghost justify-start w-full" id="mobile-settings-option">
+              <i data-lucide="settings" class="h-4 w-4 mr-2"></i>
+              Settings
+            </button>
+          </div>
         </div>
       </div>
     `;
@@ -176,6 +212,59 @@ export class Navbar {
     cartButton?.addEventListener("click", () => {
       (window as any).openCart();
     });
+
+    const profileButton = nav.querySelector("#user-menu-button");
+    const profileMenu = nav.querySelector("#profile-menu");
+
+    profileButton?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      this.toggleProfileMenu(nav);
+    });
+
+    const loginOption = nav.querySelector("#login-option");
+    const logoutOption = nav.querySelector("#logout-option");
+    const settingsOption = nav.querySelector("#settings-option");
+
+    loginOption?.addEventListener("click", () => {
+      this.handleLogin();
+      this.closeProfileMenu(nav);
+    });
+
+    logoutOption?.addEventListener("click", () => {
+      this.handleLogout();
+      this.closeProfileMenu(nav);
+    });
+
+    settingsOption?.addEventListener("click", () => {
+      this.handleSettings();
+      this.closeProfileMenu(nav);
+    });
+
+    document.addEventListener("click", (e) => {
+      const profileDropdown = nav.querySelector("#profile-dropdown");
+      if (profileDropdown && !profileDropdown.contains(e.target as Node)) {
+        this.closeProfileMenu(nav);
+      }
+    });
+
+    const mobileLoginOption = nav.querySelector("#mobile-login-option");
+    const mobileLogoutOption = nav.querySelector("#mobile-logout-option");
+    const mobileSettingsOption = nav.querySelector("#mobile-settings-option");
+
+    mobileLoginOption?.addEventListener("click", () => {
+      this.handleLogin();
+      this.closeMobileMenu(nav);
+    });
+
+    mobileLogoutOption?.addEventListener("click", () => {
+      this.handleLogout();
+      this.closeMobileMenu(nav);
+    });
+
+    mobileSettingsOption?.addEventListener("click", () => {
+      this.handleSettings();
+      this.closeMobileMenu(nav);
+    });
   }
 
   private handleSearch(e: Event): void {
@@ -193,6 +282,10 @@ export class Navbar {
 
   private toggleMobileMenu(nav: HTMLElement): void {
     this.isMenuOpen = !this.isMenuOpen;
+
+    if (this.isMenuOpen) {
+      this.closeProfileMenu(nav);
+    }
 
     const mobileMenu = nav.querySelector("#mobile-menu");
     const menuIcon = nav.querySelector("#menu-icon");
@@ -221,5 +314,57 @@ export class Navbar {
       menuIcon?.classList.remove("hidden");
       closeIcon?.classList.add("hidden");
     }
+  }
+
+  private toggleProfileMenu(nav: HTMLElement): void {
+    this.isProfileMenuOpen = !this.isProfileMenuOpen;
+
+    if (this.isProfileMenuOpen) {
+      this.closeMobileMenu(nav);
+    }
+
+    const profileMenu = nav.querySelector("#profile-menu");
+    const profileButton = nav.querySelector("#user-menu-button");
+
+    if (this.isProfileMenuOpen) {
+      profileMenu?.classList.remove("hidden");
+      profileButton?.setAttribute("aria-expanded", "true");
+    } else {
+      profileMenu?.classList.add("hidden");
+      profileButton?.setAttribute("aria-expanded", "false");
+    }
+  }
+
+  private closeProfileMenu(nav: HTMLElement): void {
+    if (this.isProfileMenuOpen) {
+      this.isProfileMenuOpen = false;
+
+      const profileMenu = nav.querySelector("#profile-menu");
+      const profileButton = nav.querySelector("#user-menu-button");
+
+      profileMenu?.classList.add("hidden");
+      profileButton?.setAttribute("aria-expanded", "false");
+    }
+  }
+
+  private handleLogin(): void {
+    import("@/utils/utils").then(({ showToast }) => {
+      showToast("Login functionality would be implemented here", "info");
+    });
+    console.log("Login clicked");
+  }
+
+  private handleLogout(): void {
+    import("@/utils/utils").then(({ showToast }) => {
+      showToast("Logout functionality would be implemented here", "info");
+    });
+    console.log("Logout clicked");
+  }
+
+  private handleSettings(): void {
+    import("@/utils/utils").then(({ showToast }) => {
+      showToast("Settings functionality would be implemented here", "info");
+    });
+    console.log("Settings clicked");
   }
 }

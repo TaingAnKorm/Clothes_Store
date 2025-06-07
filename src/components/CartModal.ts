@@ -89,6 +89,7 @@ export class CartModal {
       }
     });
 
+    // Escape key
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && this.isOpen) {
         this.close();
@@ -112,7 +113,8 @@ export class CartModal {
           <div class="text-6xl mb-4">🛒</div>
           <h3 class="text-lg font-medium mb-2">Your cart is empty</h3>
           <p class="text-muted-foreground mb-4">Add some products to get started!</p>
-          <button class="btn btn-primary" onclick="document.getElementById('cart-modal-overlay').querySelector('#close-cart').click()">
+          <button class="btn btn-primary w-full h-12 px-6 py-3 text-sm font-medium max-w-xs mx-auto" onclick="document.getElementById('cart-modal-overlay').querySelector('#close-cart').click()">
+            <i data-lucide="shopping-bag" class="h-4 w-4 mr-2"></i>
             Continue Shopping
           </button>
         </div>
@@ -142,12 +144,13 @@ export class CartModal {
           <span class="text-primary">${formatPrice(totalPrice)}</span>
         </div>
 
-        <button class="btn btn-primary w-full" onclick="window.proceedToCheckout()">
+        <button class="btn btn-primary w-full h-12 px-6 py-3 text-sm font-medium" onclick="window.proceedToCheckout()">
           <i data-lucide="credit-card" class="h-4 w-4 mr-2"></i>
           Checkout
         </button>
 
-        <button class="btn btn-outline w-full" onclick="document.getElementById('cart-modal-overlay').querySelector('#close-cart').click()">
+        <button class="btn btn-outline w-full h-12 px-6 py-3 text-sm font-medium" onclick="document.getElementById('cart-modal-overlay').querySelector('#close-cart').click()">
+          <i data-lucide="arrow-left" class="h-4 w-4 mr-2"></i>
           Continue Shopping
         </button>
       </div>
